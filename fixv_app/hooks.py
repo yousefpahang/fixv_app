@@ -117,6 +117,10 @@ app_license = "mit"
 # override_doctype_class = {
 # 	"ToDo": "custom_app.overrides.CustomToDo"
 # }
+override_doctype_class = {
+	"Bank": "fixv_app.fixv_app.fixv_overrides.myBank"
+}
+
 
 # Document Events
 # ---------------
