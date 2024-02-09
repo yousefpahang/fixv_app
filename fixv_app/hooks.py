@@ -119,7 +119,7 @@ app_license = "mit"
 # }
 override_doctype_class = {
 	"Bank": "fixv_app.fixv_app.fixv_overrides.myBank",
-    "Employee": "fixv_app.overrides.fixv_custom.CustomEmployee"
+    "Employee": "fixv_app.fixv_app.overrides.fixv_custom.CustomEmployee",
 }
 
 
