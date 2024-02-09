@@ -118,8 +118,11 @@ app_license = "mit"
 # 	"ToDo": "custom_app.overrides.CustomToDo"
 # }
 override_doctype_class = {
-	"Bank": "fixv_app.fixv_app.fixv_overrides.myBank",
-    "Employee": "fixv_app.fixv_app.overrides.fixv_custom.CustomEmployee",
+	# "Bank": "fixv_app.fixv_app.fixv_overrides.myBank",
+    # "Employee": "fixv_app.overrides.fixv_custom.CustomEmployee",
+     "Item": {
+        "validate": "fixv_app.fixv_app.custom_scripts.item.validate"
+    },
 }
 
 
