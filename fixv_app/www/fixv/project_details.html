@@ -1,0 +1,225 @@
+{% extends "templates/layout.html" %}
+
+{% block content %}
+<div class="container">
+    {% if project %}
+    <h1>{{ project.project_name }}</h1>
+    <p>Status: {{ project.status }}</p>
+        
+
+
+    <div class="row gy-4">
+      <!-- User Sidebar -->
+      <div class="col-xl-4 col-lg-5 col-md-5 order-1 order-md-0">
+        <!-- User Card -->
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="pb-2 border-bottom mb-4">Customer Details</h5>
+            <div class="info-container">
+              <ul class="list-unstyled">
+                <li class="mb-3">
+                  <span class="fw-bold me-2">Name:</span>
+                  <span>{{project.customer}}</span>
+                </li>
+                <li class="mb-3">
+                  <span class="fw-bold me-2">Mobile:</span>
+                  <span>{{project.custom_contact_mobile}}</span>
+                </li>
+                <li class="mb-3">
+                  <span class="fw-bold me-2">Whatsapp:</span>
+                  {% if project.custom_whatsapp %}
+                  <span>
+                    <a href="https://wa.me/{{project.custom_whatsapp}}" target="_blank">{{project.custom_whatsapp}}</a>
+                </span>
+                  {% endif %}
+
+                  
+                </li>
+                <li class="mb-3">
+                  <span class="fw-bold me-2">City:</span>
+                  <span>Abu Dhabi</span>
+                </li>
+                <li class="mb-3">
+                  <span class="fw-bold me-2">Address:</span>
+                  <span>MBZ city - East 12</span>
+                </li>
+                </p>
+                {% endif %}
+              </ul>
+              <div class="d-grid w-100 mt-3 pt-2">
+                <button class="btn btn-primary" data-bs-target="#upgradePlanModal" data-bs-toggle="modal">Call</button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <!-- /User Card -->
+        <!-- Plan Card -->
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start">
+              <span class="badge bg-label-primary">{{ project.status }}</span>
+              <div class="d-flex justify-content-center">
+                <sup class="h5 pricing-currency mt-3 mt-sm-4 mb-0 me-1 text-primary">AED {{project.custom_expected_revenue}}</sup>
+              </div>
+            </div>
+            <ul class="list-unstyled">
+              <li class="mb-3">
+                <span class="fw-bold me-2">Creation Date:</span>
+                <span>{{ frappe.format(project.creation, {'fieldtype': 'Date'}) }} </span>
+              </li>
+              <li class="mb-3">
+                <span class="fw-bold me-2">Creation Date:</span>
+                <span><i class="bx bx-time-five me-2"></i>{{ project.days_ago }}</span>
+              </li>
+              <li class="mb-3">
+                <span class="fw-bold me-2">Expected Start:</span>
+                <span>{{project.expected_start_date}}</span>
+              </li>
+              <li class="mb-3">
+                <span class="fw-bold me-2">Expected End:</span>
+                <span>{{project.expected_end_date}}</span>
+              </li>
+              {% if project.tags %}
+                  {% for tag in project.tags %}
+                  <li class="mb-3">
+                  <span class="badge bg-label-primary"> {{ tag }} </span>
+                </li>
+              {% endfor %}
+            </ul>
+
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <h6 class="mb-0">Days</h6>
+              <h6 class="mb-0">{{ project.percent_complete|int }} Completed</h6>
+            </div>
+            <div class="progress mb-1" style="height: 8px;">
+              <div class="progress-bar w-{{ project.percent_complete|int }}" role="progressbar"  aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+
+          </div>
+        </div>
+        <!-- /Plan Card -->
+      </div>
+      <!--/ User Sidebar -->
+    
+    
+      <!-- User Content -->
+      <div class="col-xl-8 col-lg-7 col-md-7 order-0 order-md-1">
+        <!-- User Pills -->
+        <ul class="nav nav-pills flex-column flex-md-row mb-3">
+          <li class="nav-item"><a class="nav-link active" href="javascript:void(0);"><i class="bx bx-user me-1"></i>Tasks</a></li>
+          <li class="nav-item"><a class="nav-link" href="app-user-view-security.html"><i class="bx bx-lock-alt me-1"></i>Connections</a></li>
+          <li class="nav-item"><a class="nav-link" href="app-user-view-billing.html"><i class="bx bx-detail me-1"></i>Billing &amp; Plans</a></li>
+          <li class="nav-item"><a class="nav-link" href="app-user-view-notifications.html"><i class="bx bx-bell me-1"></i>Notifications</a></li>
+          <li class="nav-item"><a class="nav-link" href="app-user-view-connections.html"><i class="bx bx-link-alt me-1"></i>Connections</a></li>
+        </ul>
+
+        <!--/ User Pills -->
+        <!-- Sub Content -->
+        <div id="sub_content">
+          {% include "templates/includes/task_list.html" %}
+        </div>
+        <!-- Sub Content -->
+        <button 
+        class="secondary"
+        hx-get="/api/method/fixv_app.api.my_custom_api.tasks_list" 
+        hx-target="#sub_content">Refresh
+        </button>
+    
+        <!-- Activity Timeline -->
+        <div class="card mb-4">
+          <h5 class="card-header">User Activity Timeline</h5>
+          <div class="card-body">
+            <ul class="timeline">
+              <li class="timeline-item timeline-item-transparent">
+                <span class="timeline-point timeline-point-primary"></span>
+                <div class="timeline-event">
+                  <div class="timeline-header mb-1">
+                    <h6 class="mb-0">12 Invoices have been paid</h6>
+                    <small class="text-muted">12 min ago</small>
+                  </div>
+                  <p class="mb-2">Invoices have been paid to the company</p>
+                  <div class="d-flex">
+                    <a href="javascript:void(0)" class="me-3">
+                      <img src="../../assets/img/icons/misc/pdf.png" alt="PDF image" width="20" class="me-2">
+                      <span class="fw-medium text-body">invoices.pdf</span>
+                    </a>
+                  </div>
+                </div>
+              </li>
+              <li class="timeline-item timeline-item-transparent">
+                <span class="timeline-point timeline-point-warning"></span>
+                <div class="timeline-event">
+                  <div class="timeline-header mb-1">
+                    <h6 class="mb-0">Client Meeting</h6>
+                    <small class="text-muted">45 min ago</small>
+                  </div>
+                  <p class="mb-2">Project meeting with john @10:15am</p>
+                  <div class="d-flex flex-wrap">
+                    <div class="avatar me-3">
+                      <img src="../../assets/img/avatars/3.png" alt="Avatar" class="rounded-circle">
+                    </div>
+                    <div>
+                      <h6 class="mb-0">Lester McCarthy (Client)</h6>
+                      <span>CEO of Pixinvent</span>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li class="timeline-item timeline-item-transparent">
+                <span class="timeline-point timeline-point-info"></span>
+                <div class="timeline-event">
+                  <div class="timeline-header mb-1">
+                    <h6 class="mb-0">Create a new project for client</h6>
+                    <small class="text-muted">2 Day Ago</small>
+                  </div>
+                  <p class="mb-2">5 team members in a project</p>
+                  <div class="d-flex align-items-center avatar-group">
+                    <div class="avatar pull-up" data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" aria-label="Vinnie Mostowy" data-bs-original-title="Vinnie Mostowy">
+                      <img src="../../assets/img/avatars/5.png" alt="Avatar" class="rounded-circle">
+                    </div>
+                    <div class="avatar pull-up" data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" aria-label="Marrie Patty" data-bs-original-title="Marrie Patty">
+                      <img src="../../assets/img/avatars/12.png" alt="Avatar" class="rounded-circle">
+                    </div>
+                    <div class="avatar pull-up" data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" aria-label="Jimmy Jackson" data-bs-original-title="Jimmy Jackson">
+                      <img src="../../assets/img/avatars/9.png" alt="Avatar" class="rounded-circle">
+                    </div>
+                    <div class="avatar pull-up" data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" aria-label="Kristine Gill" data-bs-original-title="Kristine Gill">
+                      <img src="../../assets/img/avatars/6.png" alt="Avatar" class="rounded-circle">
+                    </div>
+                    <div class="avatar pull-up" data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" aria-label="Nelson Wilson" data-bs-original-title="Nelson Wilson">
+                      <img src="../../assets/img/avatars/14.png" alt="Avatar" class="rounded-circle">
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li class="timeline-item timeline-item-transparent">
+                <span class="timeline-point timeline-point-success"></span>
+                <div class="timeline-event">
+                  <div class="timeline-header mb-1">
+                    <h6 class="mb-0">Design Review</h6>
+                    <small class="text-muted">5 days Ago</small>
+                  </div>
+                  <p class="mb-0">Weekly review of freshly prepared design for our new app.</p>
+                </div>
+              </li>
+              <li class="timeline-end-indicator">
+                <i class="bx bx-check-circle"></i>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- /Activity Timeline -->
+    
+      </div>
+      <!--/ User Content -->
+    </div>
+    {% else %}
+    <p>Project details not available.</p>
+    {% endif %}
+
+
+</div>
+
+
+{% endblock %}
