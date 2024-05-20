@@ -9,9 +9,9 @@
 
 
     <div class="row gy-4">
-      <!-- User Sidebar -->
+      <!-- Customer Sidebar -->
       <div class="col-xl-4 col-lg-5 col-md-5 order-1 order-md-0">
-        <!-- User Card -->
+        <!-- Customer Card -->
         <div class="card mb-4">
           <div class="card-body">
             <h5 class="pb-2 border-bottom mb-4">Customer Details</h5>
@@ -53,8 +53,8 @@
             </div>
           </div>
         </div>
-        <!-- /User Card -->
-        <!-- Plan Card -->
+        <!-- /Customer Card -->
+        <!-- Project Schedule Card -->
         <div class="card">
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-start">
@@ -98,9 +98,9 @@
 
           </div>
         </div>
-        <!-- /Plan Card -->
+        <!-- /Project Schedule Card -->
       </div>
-      <!--/ User Sidebar -->
+      <!--/ Customer Sidebar -->
     
     
       <!-- User Content -->
@@ -117,7 +117,71 @@
         <!--/ User Pills -->
         <!-- Sub Content -->
         <div id="sub_content">
-          {% include "templates/includes/task_list.html" %}
+          <!-- {% include "templates/includes/task_list.html" %} -->
+                  <!-- Tasks table -->
+        <div class="card mb-4">
+          <div class="card-header header-elements">
+            <h5 class="m-0 me-2">Task List</h5>
+    
+            <div class="card-header-elements ms-auto">
+              <button type="button" class="btn btn btn-primary"><span class="tf-icon bx bx-plus bx-xs me-1"></span>Add Task</button>
+            </div>
+          </div>
+          <div class="card-body">
+          {% if project.tasks %}  
+          <ul class="p-0 m-0">
+            {% for task in project.tasks %}
+            <div class="added-cards">
+              <div class="cardMaster border p-3 rounded mb-3">
+                <div class="d-flex justify-content-between flex-sm-row flex-column">
+                  <div class="card-information">
+                    <h5 class="mb-1">{{ task.name }}</h5>
+                    <h6 class="mb-1">{{ task.subject }}</h6>
+                    <ul class="list-unstyled">
+                      <li class="mb-3">
+                    <span class="fw-bold me-2">Expected Start:</span>
+                    <span>{{task.exp_start_date }}</span>
+                    </li>
+                    <li class="mb-3">
+                    <span class="fw-bold me-2">Expected End:</span>
+                    <span>{{task.exp_end_date }}</span>
+                  </li>
+                  </div>
+                  <div class="d-flex flex-column text-start text-lg-end">
+                    <div class="d-flex order-sm-0 order-1 mt-3">
+                      <button class="btn btn-label-primary me-3" data-bs-toggle="modal" data-bs-target="#editCCModal">Start</button>
+                      <button class="btn btn-label-secondary">Delete</button>
+                      <form>
+                      <select id="task-status-select" class="form-select" name="new_status"
+                          
+                          hx-post="/api/method/fixv_app.api.my_custom_api.update_task_status?task_id={{task.name}}" 
+                          hx-trigger="change" 
+                          hx-target="#status_update" 
+                          hx-swap="innerHTML"
+                          hx-include="#task-status-select"
+                      >
+                        {% for status in project.tasks_status %}
+                          <option value="{{status}}" {% if task.status == status %} selected {% endif %}>{{ status}}</option>
+                        {% endfor %}
+                    </select>
+
+                  </form>
+                    <div id="status-message"></div>
+                    </div>
+                    <small class="mt-sm-auto mt-2 order-sm-1 order-0">Card expires at 12/26</small>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+              {% endfor %}
+          </ul>
+          {% else %} 
+          <p>No tasks assigned.</p>
+          {% endif %}
+        </div>
+        </div>
+      <!-- /Tasks table -->
         </div>
         <!-- Sub Content -->
         <button 
