@@ -123,8 +123,8 @@ app_license = "mit"
 # Permissions evaluated in scripted ways
 
 permission_query_conditions = {
-# 	"Event": "frappe.desk.doctype.event.event.get_permission_query_conditions",
-    "project": "fixv_app.fixv_app.permissions.get_project_permission_query"
+	# "Event": "frappe.desk.doctype.event.event.get_permission_query_conditions",
+    "Project": "fixv_app.fixv_app.permissions.get_project_permission_query"
 }
 #
 # has_permission = {
