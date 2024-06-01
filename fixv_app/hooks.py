@@ -11,8 +11,28 @@ app_license = "mit"
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/fixv_app/css/fixv_app.css"
+# app_include_css = [
+#     "/assets/fixv_app/css/core.css",
+#     "/assets/fixv_app/css/boxicons.css",
+#     "/assets/fixv_app/css/theme-default.css",
+#     "/assets/fixv_app/libs/perfect-scrollbar/perfect-scrollbar.css",
+
+#     ]
 # app_include_js = "/assets/fixv_app/js/fixv_app.js"
-app_include_js = "/assets/fixv_app/js/project_dashboard_extension.js"
+# app_include_js = [
+# #    "/assets/fixv_app/js/project_dashboard_extension.js",
+#     # "/assets/fixv_app/js/config.js",
+#     # "/assets/fixv_app/js/helpers.js",
+#     # "/assets/fixv_app/js/bootstrap.js",
+#     # "/assets/fixv_app/js/menu.js",
+#     # "/assets/fixv_app/js/main.js",
+#     # "/assets/fixv_app/libs/jquery/jquery.js",
+#     # "/assets/fixv_app/libs/popper/popper.js",
+#     # "/assets/fixv_app/libs/hammer/hammer.js",
+#     # "/assets/fixv_app/libs/perfect-scrollbar/perfect-scrollbar.js",
+    
+#     ]
+
 # include js, css files in header of web template
 # web_include_css = "/assets/fixv_app/css/fixv_app.css"
 # web_include_js = "/assets/fixv_app/js/fixv_app.js"
@@ -102,9 +122,10 @@ app_include_js = "/assets/fixv_app/js/project_dashboard_extension.js"
 # -----------
 # Permissions evaluated in scripted ways
 
-# permission_query_conditions = {
-# 	"Event": "frappe.desk.doctype.event.event.get_permission_query_conditions",
-# }
+permission_query_conditions = {
+	# "Event": "frappe.desk.doctype.event.event.get_permission_query_conditions",
+    "Project": "fixv_app.fixv_app.permissions.get_project_permission_query"
+}
 #
 # has_permission = {
 # 	"Event": "frappe.desk.doctype.event.event.has_permission",
@@ -117,7 +138,7 @@ app_include_js = "/assets/fixv_app/js/project_dashboard_extension.js"
 # override_doctype_class = {
 # 	"ToDo": "custom_app.overrides.CustomToDo"
 # }
-print("yousef is Loading hooks.py for My Custom App")
+
 override_doctype_class = {
 	# "Bank": "fixv_app.fixv_app.fixv_overrides.myBank",
     # "Employee": "fixv_app.overrides.fixv_custom.CustomEmployee",

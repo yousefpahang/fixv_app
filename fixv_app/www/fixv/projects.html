@@ -1,0 +1,185 @@
+{% extends "templates/layout.html" %}
+
+{% block content %}
+<h4 class="py-3 breadcrumb-wrapper mb-4"><span class="text-muted fw-light">Projects</span></h4>
+
+<div class="card mb-4">
+  <div class="card-header d-flex flex-wrap justify-content-between gap-3">
+    <div class="card-title mb-0 me-1">
+      <h5 class="mb-1">My Projects</h5>
+
+    </div>
+    <!-- <div class="d-flex justify-content-md-end align-items-center gap-3 flex-wrap">
+      <div class="position-relative"><select id="select2_course_select" class="select2 form-select select2-hidden-accessible" data-placeholder="All Courses" data-select2-id="select2_course_select" tabindex="-1" aria-hidden="true">
+        <option value="" data-select2-id="2">All Courses</option>
+        <option value="all courses">All Courses</option>
+        <option value="ui/ux">UI/UX</option>
+        <option value="seo">SEO</option>
+        <option value="web">Web</option>
+        <option value="music">Music</option>
+        <option value="painting">Painting</option>
+      </select><span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="1" style="width: 117.5px;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-select2_course_select-container"><span class="select2-selection__rendered w-px-150" id="select2-select2_course_select-container" role="textbox" aria-readonly="true"><span class="select2-selection__placeholder">All Courses</span></span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+    </div> -->
+
+      <label class="switch">
+        <input type="checkbox" class="switch-input" id="hideCompletedCheckbox">
+        <span class="switch-toggle-slider">
+          <span class="switch-on"></span>
+          <span class="switch-off"></span>
+        </span>
+        <span class="switch-label text-nowrap mb-0">Hide completed</span>
+      </label>
+    </div>
+  </div>
+<div class="card-body">
+  <div class="row gy-4 mb-4">
+<!-- ================================= PROJECT CARD STARTS HERE ================================= -->
+    {% for project in projects %}
+    <div class="col-sm-6 col-lg-4 project" data-status="{{ project.status }}">
+      <div class="card p-2 h-100">
+        <div class="rounded-2 text-center mb-3">
+        
+        </div>
+        <div class="card-body p-3 pt-2">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="badge bg-label-primary">{{ project.status }}</span>
+            <h6 class="d-flex align-items-center justify-content-center gap-1 mb-0">
+              {{project.priority}} <span class="text-warning">
+                <!-- <i class="bx bxs-star me-1"></i> -->
+              </span><span class="text-muted">{{project.custom_expected_revenue}}<i class='bx bx-dollar'></i></span>
+            </h6>
+          </div>
+          <a href="app-academy-course-details.html" class="h5">{{ project.project_name }}</a>
+          <p class="mt-2"></p>
+          <p class="d-flex align-items-center"><i class="bx bx-user me-2"></i>{{project.customer}}</p>
+          <p class="d-flex align-items-center"><i class="bx bx-mobile me-2"></i>{{project.custom_contact_mobile}}</p>
+          {% if project.custom_whatsapp %}
+          <p class="d-flex align-items-center"><i class="bx bxl-whatsapp me-2"></i>
+            <a href="https://wa.me/{{project.custom_whatsapp}}" target="_blank">{{project.custom_whatsapp}}</a>
+          </p>
+          {% endif %}
+          <p class="d-flex align-items-center"><i class="bx bx-time-five me-2"></i>{{ project.days_ago }}</p>
+          <p class="d-flex align-items-center"><i class="bx bx-current-location me-2"></i><a href="#">Abu Dhabi Mussafah - 100 KM</a></p>
+          {% if project.tags %}
+          <p class="d-flex align-items-center">
+              {% for tag in project.tags %}
+              <span class="badge bg-label-primary"> {{ tag }} </span>
+          {% endfor %}
+            </p>
+          {% endif %}
+          {% if project.tasks %}  
+          <ul class="p-0 m-0">
+            {% for task in project.tasks %}
+              <li class="d-flex mb-4">
+                <div class="avatar avatar-sm flex-shrink-0 me-3">
+                  <span class="avatar-initial rounded-circle bg-label-primary"><i class="bx bx-cube"></i></span>
+                </div>
+                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                  <div class="me-2">
+                    <p class="mb-0 lh-1">{{ task.subject }}</p>
+                    <small class="text-muted">{{task.exp_start_date }}</small>
+                  </div>
+                  <div class="item-progress">{{ task.status }} </div>
+                </div>
+              </li>
+              {% endfor %}
+          </ul>
+          {% else %} 
+          <p>No tasks assigned.</p>
+          {% endif %}
+          <!-- Assigned To -->
+          {% if project.assignees %}  
+          <ul class="p-0 m-0">
+            {% for assignee in project.assignees %}
+              <li class="d-flex mb-4">
+                <div class="avatar avatar-sm flex-shrink-0 me-3">
+                  <span class="avatar-initial bg-label-success p-2"><i class="bx bx-user-pin"></i></span>
+                </div>
+                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                  <div class="me-2">
+                    <p class="mb-0 lh-1">{{ assignee.owner }}</p>
+                    <small class="text-muted">{{assignee.allocated_to }}</small>
+                  </div>
+                  <div class="item-progress"> </div>
+                </div>
+              </li>
+              {% endfor %}
+          </ul>
+          {% else %} 
+          <p>Project not assigned.</p>
+          {% endif %}          
+          <div class="progress mb-4" style="height: 12px">
+            <div class="progress-bar w-{{ project.percent_complete|int }}" role="progressbar" aria-valuenow="{{ project.percent_complete|int }}" aria-valuemin="0" aria-valuemax="100">{{ project.percent_complete|int }}%</div>
+          </div>
+          <div class="d-flex flex-column flex-md-row gap-2 text-nowrap pe-xl-3 pe-xxl-0">
+            <!-- <a class="app-academy-md-50 btn btn-label-secondary me-md-2 d-flex align-items-center" href="app-academy-course-details.html">
+              <i class="bx bx-sync align-middle me-2 "></i><span>Start Over</span>
+            </a> -->
+            <a class="app-academy-md-50 btn btn-label-primary d-flex align-items-center" href="/fixv/project_details?project_id={{ project.name }}" target="_blank">
+              <span class="me-2">Details</span><i class="bx bx-chevron-right lh-1 scaleX-n1-rtl"></i>
+            </a>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+    {% endfor  %}
+<!-- ================================= END OF PROJECT CARD ================================= -->
+
+  </div>
+  <!-- Page navigator -->
+  <!-- <nav aria-label="Page navigation" class="d-flex align-items-center justify-content-center">
+    <ul class="pagination">
+      <li class="page-item prev">
+        <a class="page-link" href="javascript:void(0);">Previous</a>
+      </li>
+      <li class="page-item active">
+        <a class="page-link" href="javascript:void(0);">1</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="javascript:void(0);">2</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="javascript:void(0);">3</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="javascript:void(0);">4</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="javascript:void(0);">5</a>
+      </li>
+      <li class="page-item next">
+        <a class="page-link" href="javascript:void(0);">Next</a>
+      </li>
+    </ul>
+  </nav> -->
+</div>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+      var checkbox = document.getElementById('hideCompletedCheckbox');
+
+      checkbox.addEventListener('change', function() {
+        console.log('switch changed')
+          var projects = document.querySelectorAll('.project');
+          projects.forEach(function(project) {
+              if (project.getAttribute('data-status') !== 'Open') {
+                  if (checkbox.checked) {
+                      project.style.display = 'none'; // Hide completed projects
+                  } else {
+                      project.style.display = ''; // Show completed projects
+                  }
+              }
+          });
+      });
+  });
+  </script>
+  
+<script>
+  function openProjectDetails(projectId) {
+    window.location.href = '/fixv/project_details?project_id=' + projectId;
+}
+  </script>
+
+{% endblock %}
