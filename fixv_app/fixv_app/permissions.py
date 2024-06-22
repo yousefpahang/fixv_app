@@ -19,3 +19,25 @@ def get_project_permission_query(user):
         condition = "1 = 2"
     
     return condition
+
+
+def get_quotation_permission_query(user):
+    roles = frappe.get_roles(user)
+
+    if "System Manager" in roles:
+        condition = ""
+    elif "Technician" in roles:
+        condition = """
+                   (
+                       `tabQuotation`.owner = {user}
+                       OR `tabQuotation`.name IN (
+                           SELECT reference_name FROM `tabToDo`
+                           WHERE reference_type = 'Quotation'
+                           AND allocated_to = {user}
+                       )
+                   )
+               """.format(user=frappe.db.escape(user))
+    else:
+        condition = "1 = 2"
+
+    return condition
