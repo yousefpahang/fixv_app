@@ -1,0 +1,24 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Sales Order",
+  "enabled": 1,
+  "modified": "2024-06-22 12:24:32.643075",
+  "module": "Fixv App",
+  "name": "Quotation to Sales Order",
+  "script": "frappe.ui.form.on('Sales Order', {\r\n    onload: function(frm) {\r\n        // Check if the sales order is being created from a quotation\r\n        if (frm.doc.quotation) {\r\n            frappe.call({\r\n                method: 'frappe.client.get',\r\n                args: {\r\n                    doctype: 'Quotation',\r\n                    name: frm.doc.quotation\r\n                },\r\n                callback: function(r) {\r\n                    if (r.message) {\r\n                        // Pre-populate the customer field\r\n                        frm.set_value('customer', r.message.customer);\r\n                    }\r\n                }\r\n            });\r\n        }\r\n    }\r\n});\r\n",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Quotation",
+  "enabled": 1,
+  "modified": "2024-06-22 20:09:13.140527",
+  "module": "Fixv App",
+  "name": "Project Quotation",
+  "script": "frappe.ui.form.on('Quotation', {\n    onload: function(frm) {\n        // Check if the quotation is being created from a project\n        console.log('Hello from qutation client 2');\n        if (frm.doc.project) {\n            frappe.call({\n                method: 'frappe.client.get',\n                args: {\n                    doctype: 'Project',\n                    name: frm.doc.project\n                },\n                callback: function(r) {\n                    if (r.message) {\n                        // Pre-populate the customer field\n                        //frm.set_value('customer', r.message.custom_project);\n                        frm.set_value('party_name', r.message.customer);\n                        console.log(r.message);\n                    }\n                }\n            });\n        }\n    }\n});\n",
+  "view": "Form"
+ }
+]
